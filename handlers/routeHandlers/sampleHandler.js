@@ -10,8 +10,12 @@
 // module scaffolding
 const handle = {};
 
-handle.sampleHandler = () => {
-    console.log('Sample');
+handle.sampleHandler = (requestProperties, callback) => {
+    console.log(requestProperties);
+
+    callback(200, {
+        message: 'This is a sample url',
+    });
 };
 
 // export module
