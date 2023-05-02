@@ -11,14 +11,21 @@
 const http = require('http');
 const { handleReqRes } = require('./helpers/handleReqRes');
 const environment = require('./helpers/environment');
+const data = require('./lib/data');
 // app object - module scaffolding
 const app = {};
+
+// testing file system
+// @TODO: erase this code block later
+data.create('test', 'newFile', { name: 'Mmh Shohagh', language: 'BN(BD)' }, (err) => {
+    console.log('error was', err);
+});
 
 // create server
 app.createServer = () => {
     const server = http.createServer(handleReqRes);
     server.listen(environment.port, () => {
-        console.log(`Environtment variable is ${process.env.NODE_ENV}`);
+        console.log(`Environtment variable is ${environment.envName}`);
         console.log(`listening to port ${environment.port}`);
     });
 };
