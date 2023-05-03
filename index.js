@@ -17,10 +17,25 @@ const app = {};
 
 // testing file system
 // @TODO: erase this code block later
-data.create('test', 'newFile', { name: 'Mmh Shohagh', language: 'BN(BD)' }, (err) => {
+// write file
+/* data.create('test', 'newFile', { name: 'Mmh Shohagh', language: 'BN(BD)' }, (err) => {
     console.log('error was', err);
-});
+}); */
 
+// read file
+/* data.read('test', 'newFile', (err, result) => {
+    console.log(err, result);
+}); */
+
+// update file
+data.update(
+    'test',
+    'newFile',
+    { name: 'Mmh Shohagh', language: 'BN(BD)', country: 'Bangladesh' },
+    (err) => {
+        console.log(err);
+    }
+);
 // create server
 app.createServer = () => {
     const server = http.createServer(handleReqRes);
