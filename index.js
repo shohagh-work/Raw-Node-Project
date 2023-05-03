@@ -28,14 +28,19 @@ const app = {};
 }); */
 
 // update file
-data.update(
+/* data.update(
     'test',
     'newFile',
     { name: 'Mmh Shohagh', language: 'BN(BD)', country: 'Bangladesh' },
     (err) => {
         console.log(err);
     }
-);
+); */
+
+// delete file
+/* data.delete('test', 'newFile', (err) => {
+    console.log(err);
+}); */
 // create server
 app.createServer = () => {
     const server = http.createServer(handleReqRes);
