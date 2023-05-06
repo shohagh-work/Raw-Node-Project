@@ -19,10 +19,14 @@ handle.userHandler = (requestProperties, callback) => {
             message: 'serverside error!',
         });
     }
-        callback(200, {
-            message: 'This is a user url',
-        });
-    }
+};
+
+// handle._user scaffolding
+handle._user = {};
+
+// for get method
+handle._user.get = (requestProperties,callback) {
+    
 };
 
 // export module
