@@ -24,7 +24,11 @@ handler.userHandler = (requestProperties, callback) => {
 handler._users = {};
 
 // for get method
-// handler._users.post = (requestProperties, callback) => {};
+handler._users.post = (requestProperties, callback) => {
+    callback(405, {
+        message: 'serverside error',
+    });
+};
 handler._users.get = (requestProperties, callback) => {
     callback(200, {});
 };
