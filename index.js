@@ -18,9 +18,9 @@ const app = {};
 // testing file system
 // @TODO: erase this code block later
 // write file
-data.create('test', 'newFile', { name: 'Mmh Shohagh', language: 'BN(BD)' }, (err) => {
+/* data.create('test', 'newFile', { name: 'Mmh Shohagh', language: 'BN(BD)' }, (err) => {
     console.log('error was', err);
-});
+}); */
 
 // read file
 /* data.read('test', 'newFile', (err, result) => {

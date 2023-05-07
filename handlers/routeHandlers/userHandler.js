@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /*
  *
  * Title: User Handler
@@ -8,26 +9,27 @@
  */
 
 // module scaffolding
-const handle = {};
+const handler = {};
 
-handle.userHandler = (requestProperties, callback) => {
+handler.userHandler = (requestProperties, callback) => {
     const acceptedMethods = ['get', 'post', 'put', 'delete'];
     if (acceptedMethods.indexOf(requestProperties.method) > -1) {
-
+        handler._users[requestProperties.method](requestProperties, callback);
     } else {
-        callback(405, {
-            message: 'serverside error!',
-        });
+        callback(405);
     }
 };
 
 // handle._user scaffolding
-handle._user = {};
+handler._users = {};
 
 // for get method
-handle._user.get = (requestProperties,callback) {
-    
+// handler._users.post = (requestProperties, callback) => {};
+handler._users.get = (requestProperties, callback) => {
+    callback(200, {});
 };
+// handler._users.put = (requestProperties, callback) => {};
+// handler._users.delete = (requestProperties, callback) => {};
 
 // export module
-module.exports = handle;
+module.exports = handler;
