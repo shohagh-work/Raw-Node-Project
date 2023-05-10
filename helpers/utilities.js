@@ -8,6 +8,8 @@
  */
 
 // dependencies
+const crypto = require('crypto');
+const environments = require('./environments');
 
 // module scaffolding
 const utilities = {};
@@ -21,6 +23,16 @@ utilities.parseJSON = (jsonString) => {
         output = {};
     }
     return output;
+};
+
+// hash string
+utilities.hash = (str) => {
+    console.log(environments, process.env.NODE_ENV);
+    if (typeof str === 'string' && str.length > 0) {
+        const hash = crypto.createHmac('sha256', environments.secretKey).update(str).digest('hex');
+        return hash;
+    }
+    return false;
 };
 
 // export module
