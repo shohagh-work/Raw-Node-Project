@@ -36,6 +36,7 @@ handler.handleReqRes = (req, res) => {
         headersObject,
     };
 
+    console.log(requestProperties.parsedUrl);
     const decoder = new StringDecoder('utf-8');
     let realData = '';
 
