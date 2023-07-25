@@ -7,6 +7,14 @@
  *
  */
 
+/*
+ * Title: Handle Request Response
+ * Description: Handle Resquest and response
+ * Author: Sumit Saha ( Learn with Sumit )
+ * Date: 11/21/2020
+ *
+ */
+
 // dependencies
 const url = require('url');
 const { StringDecoder } = require('string_decoder');
@@ -36,7 +44,6 @@ handler.handleReqRes = (req, res) => {
         headersObject,
     };
 
-    console.log(requestProperties.parsedUrl);
     const decoder = new StringDecoder('utf-8');
     let realData = '';
 

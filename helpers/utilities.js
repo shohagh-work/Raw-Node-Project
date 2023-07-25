@@ -6,29 +6,39 @@
  * Date: 7/05/2023
  *
  */
+/*
+ * Title: Utilities
+ * Description: Important utility functions
+ * Author: Sumit Saha ( Learn with Sumit )
+ * Date: 11/21/2020
+ *
+ */
 
 // dependencies
-const crypto = require('crypto');
-const environments = require('./environments');
 
 // module scaffolding
-const utilities = {};
+const crypto = require('crypto');
 
-// parse JSON string to object
+const utilities = {};
+const environments = require('./environments');
+
+// parse JSON string to Object
 utilities.parseJSON = (jsonString) => {
     let output;
+
     try {
         output = JSON.parse(jsonString);
     } catch {
         output = {};
     }
+
     return output;
 };
 
 // hash string
 utilities.hash = (str) => {
-    console.log(environments, process.env.NODE_ENV);
     if (typeof str === 'string' && str.length > 0) {
+        console.log(environments, process.env.NODE_ENV);
         const hash = crypto.createHmac('sha256', environments.secretKey).update(str).digest('hex');
         return hash;
     }
@@ -45,7 +55,7 @@ utilities.createRandomString = (strlength) => {
         let output = '';
         for (let i = 1; i <= length; i += 1) {
             const randomCharacter = possiblecharacters.charAt(
-                Math.floor(Math.random() * possiblecharacters.length)
+                Math.floor(Math.random() * possiblecharacters.length),
             );
             output += randomCharacter;
         }

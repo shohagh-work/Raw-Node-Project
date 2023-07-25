@@ -31,6 +31,7 @@ handler._check = {};
 
 handler._check.post = (requestProperties, callback) => {
     // validate inputs
+    console.log(requestProperties.body);
     const protocol =
         typeof requestProperties.body.protocol === 'string' &&
         ['http', 'https'].indexOf(requestProperties.body.protocol) > -1
@@ -48,7 +49,7 @@ handler._check.post = (requestProperties, callback) => {
         ['GET', 'POST', 'PUT', 'DELETE'].indexOf(requestProperties.body.method) > -1
             ? requestProperties.body.method
             : false;
-    console.log(requestProperties.method);
+
     const successCodes =
         typeof requestProperties.body.successCodes === 'object' &&
         requestProperties.body.successCodes instanceof Array
@@ -68,23 +69,23 @@ handler._check.post = (requestProperties, callback) => {
             typeof requestProperties.headersObject.token === 'string'
                 ? requestProperties.headersObject.token
                 : false;
-
         // lookup the user phone by reading the token
-        data.read('token', token, (err1, tokenData) => {
+        data.read('tokens', token, (err1, tokenData) => {
             if (!err1 && tokenData) {
-                const userPhone = parseJSON(token).phone;
+                const userPhone = parseJSON(tokenData).phone;
                 // lookup the user data
                 data.read('users', userPhone, (err2, userData) => {
                     if (!err2 && userData) {
                         tokenHandler._token.verify(token, userPhone, (tokenIsValid) => {
                             if (tokenIsValid) {
                                 const userObject = parseJSON(userData);
-                                const userCheck =
+                                const userChecks =
                                     typeof userObject.checks === 'object' &&
                                     userObject.checks instanceof Array
                                         ? userObject.checks
                                         : [];
-                                if (userCheck.length < maxChecks) {
+
+                                if (userChecks.length < maxChecks) {
                                     const checkId = createRandomString(20);
                                     const checkObject = {
                                         id: checkId,
@@ -95,16 +96,16 @@ handler._check.post = (requestProperties, callback) => {
                                         successCodes,
                                         timeoutSeconds,
                                     };
-                                    // save the check data
+                                    // save the object
                                     data.create('checks', checkId, checkObject, (err3) => {
                                         if (!err3) {
-                                            // add the checkId to the user's object
-                                            userObject.checks = userCheck;
+                                            // add check id to the user's object
+                                            userObject.checks = userChecks;
                                             userObject.checks.push(checkId);
 
                                             // save the new user data
                                             data.update('users', userPhone, userObject, (err4) => {
-                                                if (err4) {
+                                                if (!err4) {
                                                     // return the data about the new check
                                                     callback(200, checkObject);
                                                 } else {
@@ -121,24 +122,24 @@ handler._check.post = (requestProperties, callback) => {
                                     });
                                 } else {
                                     callback(401, {
-                                        error: 'user has already reached max check limits!',
+                                        error: 'Userhas already reached max check limit!',
                                     });
                                 }
                             } else {
                                 callback(403, {
-                                    error: 'authentication problem!',
+                                    error: 'Authentication problem!',
                                 });
                             }
                         });
                     } else {
                         callback(403, {
-                            error: 'user not fond!',
+                            error: 'User not found!',
                         });
                     }
                 });
             } else {
                 callback(403, {
-                    error: 'authentication problem!',
+                    error: 'Authentication problem!',
                 });
             }
         });
