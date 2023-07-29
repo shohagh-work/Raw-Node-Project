@@ -293,7 +293,77 @@ handler._check.put = (requestProperties, callback) => {
     }
 };
 
-handler._check.delete = (requestProperties, callback) => {};
+handler._check.delete = (requestProperties, callback) => {
+    const id =
+        typeof requestProperties.queryStringObject.id === 'string' &&
+        requestProperties.queryStringObject.id.trim().length === 20
+            ? requestProperties.queryStringObject.id
+            : false;
+
+    if (id) {
+        // lookup data from store
+        data.read('checks', id, (err1, checkData) => {
+            if (!err1 && checkData) {
+                const token =
+                    typeof requestProperties.headersObject.token === 'string'
+                        ? requestProperties.headersObject.token
+                        : false;
+
+                tokenHandler._token.verify(
+                    token,
+                    parseJSON(checkData).userPhone,
+                    (tokenIsValid) => {
+                        if (tokenIsValid) {
+                            // delete the checkdata
+                            data.delete('checks', id, (err2) => {
+                                if (!err2) {
+                                    data.read(
+                                        'users',
+                                        parseJSON(checkData).userPhone,
+                                        (err3, userData) => {
+                                            const userObject = parseJSON(userData);
+                                            if (!err3 && userData) {
+                                                const userChecks =
+                                                    typeof userObject.checks === 'string' &&
+                                                    userObject.checks instanceof Array
+                                                        ? userObject.checks
+                                                        : [];
+
+                                                // remove the deleted check id from the user's list of check
+                                                const checkPosition
+                                            } else {
+                                                callback(500, {
+                                                    error: 'There was a serverside error!',
+                                                });
+                                            }
+                                            }
+                                        }
+                                    );
+                                } else {
+                                    callback(500, {
+                                        error: 'There was a serverside error!',
+                                    });
+                                }
+                            });
+                        } else {
+                            callback(403, {
+                                error: 'Authentication Failure!',
+                            });
+                        }
+                    }
+                );
+            } else {
+                callback(400, {
+                    error: 'you have problem in your server side!',
+                });
+            }
+        });
+    } else {
+        callback(400, {
+            error: 'you have problem in your server side!',
+        });
+    }
+};
 
 // export module
 module.exports = handler;
