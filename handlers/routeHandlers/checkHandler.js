@@ -301,7 +301,7 @@ handler._check.delete = (requestProperties, callback) => {
             : false;
 
     if (id) {
-        // lookup data from store
+        // lookup the check
         data.read('checks', id, (err1, checkData) => {
             if (!err1 && checkData) {
                 const token =
@@ -314,7 +314,7 @@ handler._check.delete = (requestProperties, callback) => {
                     parseJSON(checkData).userPhone,
                     (tokenIsValid) => {
                         if (tokenIsValid) {
-                            // delete the checkdata
+                            // delete the check data
                             data.delete('checks', id, (err2) => {
                                 if (!err2) {
                                     data.read(
@@ -324,43 +324,66 @@ handler._check.delete = (requestProperties, callback) => {
                                             const userObject = parseJSON(userData);
                                             if (!err3 && userData) {
                                                 const userChecks =
-                                                    typeof userObject.checks === 'string' &&
+                                                    typeof userObject.checks === 'object' &&
                                                     userObject.checks instanceof Array
                                                         ? userObject.checks
                                                         : [];
 
-                                                // remove the deleted check id from the user's list of check
-                                                const checkPosition
+                                                // eslint-disable-next-line max-len
+                                                // remove the deleted check id from user's list of checks
+                                                const checkPosition = userChecks.indexOf(id);
+                                                if (checkPosition > -1) {
+                                                    userChecks.splice(checkPosition, 1);
+                                                    // resave the user data
+                                                    userObject.checks = userChecks;
+                                                    data.update(
+                                                        'users',
+                                                        userObject.phone,
+                                                        userObject,
+                                                        (err4) => {
+                                                            if (!err4) {
+                                                                callback(200);
+                                                            } else {
+                                                                callback(500, {
+                                                                    error: 'There was a server side problem!',
+                                                                });
+                                                            }
+                                                        }
+                                                    );
+                                                } else {
+                                                    callback(500, {
+                                                        error: 'The check id that you are trying to remove is not found in user!',
+                                                    });
+                                                }
                                             } else {
                                                 callback(500, {
-                                                    error: 'There was a serverside error!',
+                                                    error: 'There was a server side problem!',
                                                 });
-                                            }
                                             }
                                         }
                                     );
                                 } else {
                                     callback(500, {
-                                        error: 'There was a serverside error!',
+                                        error: 'There was a server side problem!',
                                     });
                                 }
                             });
                         } else {
                             callback(403, {
-                                error: 'Authentication Failure!',
+                                error: 'Authentication failure!',
                             });
                         }
                     }
                 );
             } else {
-                callback(400, {
-                    error: 'you have problem in your server side!',
+                callback(500, {
+                    error: 'You have a problem in your request',
                 });
             }
         });
     } else {
         callback(400, {
-            error: 'you have problem in your server side!',
+            error: 'You have a problem in your request',
         });
     }
 };
