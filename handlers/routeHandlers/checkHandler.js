@@ -177,7 +177,7 @@ handler._check.get = (requestProperties, callback) => {
                                 error: 'Authentication failure!',
                             });
                         }
-                    },
+                    }
                 );
             } else {
                 callback(500, {
@@ -348,7 +348,7 @@ handler._check.delete = (requestProperties, callback) => {
                                                                     error: 'There was a server side problem!',
                                                                 });
                                                             }
-                                                        },
+                                                        }
                                                     );
                                                 } else {
                                                     callback(500, {
@@ -360,7 +360,7 @@ handler._check.delete = (requestProperties, callback) => {
                                                     error: 'There was a server side problem!',
                                                 });
                                             }
-                                        },
+                                        }
                                     );
                                 } else {
                                     callback(500, {
@@ -373,7 +373,7 @@ handler._check.delete = (requestProperties, callback) => {
                                 error: 'Authentication failure!',
                             });
                         }
-                    },
+                    }
                 );
             } else {
                 callback(500, {
