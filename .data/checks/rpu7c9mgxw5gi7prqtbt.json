@@ -1,1 +1,1 @@
-{"id":"rpu7c9mgxw5gi7prqtbt","userPhone":"01885780820","protocol":"https","url":"google.com","method":"GET","successCodes":[200,201],"timeoutSeconds":2}
+{"id":"rpu7c9mgxw5gi7prqtbt","userPhone":"01885780820","protocol":"https","url":"google.com","method":"GET","successCodes":[200,201,301],"timeoutSeconds":2,"state":"up","lastChecked":1691985569824}
